@@ -484,8 +484,8 @@ void GLFWView::onKey(GLFWwindow *window, int key, int /*scancode*/, int action, 
                 });
 
             assert(geometry != mapbox::geometry::empty());
-            // Generate route boundary based on the radius (100 meter here) and points per circle(used for configuring line joints/ends and circles)
-            const std::string boundary = mbgl::GeometryBuffer(geometry, 100.0, 50).getGeoJSONBuffer();
+            // Generate route boundary based on the radius (50 meter here) and points per circle(used for configuring line joints/ends and circles)
+            const std::string boundary = mbgl::GeometryBuffer(geometry, 50.0, 10).getGeoJSONBuffer();
 
             // Add a new layer to show the generated boundary
             auto s1 = std::make_unique<GeoJSONSource>("polygon");
@@ -513,7 +513,7 @@ void GLFWView::onKey(GLFWwindow *window, int key, int /*scancode*/, int action, 
             if (labelLayer) {
                 auto symbolLayer = static_cast<mbgl::style::SymbolLayer *>(labelLayer);
                 std::stringstream ss;
-                ss << std::string(R”([z”within", )") << boundary << std::string(R"( ])");
+                ss << std::string(R"(["within", )") << boundary << std::string(R"( ])");
                 auto expr = createExpression(ss.str().c_str());
                 if (expr) {
                     symbolLayer->setFilter(Filter(std::move(expr)));
